@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Charlie — Behavioral Finance Infrastructure for Wealth Platforms</title>
+<meta name="description" content="Enterprise software that embeds behavioral finance guardrails into existing wealth management platforms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- ARTIFACT-START -->
+<style>
+  :root {
+    --bg: #FAFAFA;
+    --text: #1A1A1A;
+    --secondary: #6B6B6B;
+    --accent: #2A7D6E;
+    --accent-hover: #235f54;
+    --rule: #2A7D6E;
+    --border: rgba(0,0,0,0.08);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111111;
+      --text: #E8E8E8;
+      --secondary: #9A9A9A;
+      --accent: #2A7D6E;
+      --accent-hover: #3a9484;
+      --rule: #2A7D6E;
+      --border: rgba(255,255,255,0.1);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #111111;
+    --text: #E8E8E8;
+    --secondary: #9A9A9A;
+    --accent: #2A7D6E;
+    --accent-hover: #3a9484;
+    --rule: #2A7D6E;
+    --border: rgba(255,255,255,0.1);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .serif {
+    font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+  }
+
+  /* Top bar */
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    padding-top: env(safe-area-inset-top, 0px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    z-index: 100;
+    transition: background-color 200ms ease, border-color 200ms ease, backdrop-filter 200ms ease;
+  }
+
+  .topbar.scrolled {
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar .wordmark {
+    font-size: 1.125rem;
+    letter-spacing: -0.01em;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    background: var(--accent);
+    color: #FAFAFA;
+    padding: 0.55rem 1.1rem;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 200ms ease;
+    white-space: nowrap;
+  }
+
+  .btn:hover { background: var(--accent-hover); }
+
+  .btn-topbar { font-size: 0.875rem; padding: 0.45rem 0.9rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .topbar, .btn { transition: none; }
+  }
+
+  /* Layout */
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
+  }
+
+  section {
+    padding-block: 3rem;
+  }
+
+  section:first-of-type {
+    padding-top: calc(56px + env(safe-area-inset-top, 0px) + 3.5rem);
+  }
+
+  section + section { margin-top: 3rem; }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 1.75rem 0;
+    text-wrap: balance;
+  }
+
+  .hero .sub {
+    font-size: 1.0625rem;
+    color: var(--secondary);
+    max-width: 42ch;
+    margin: 0 0 2rem 0;
+  }
+
+  h2.heading {
+    font-size: 1.75rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 2.5rem 0;
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 0;
+  }
+
+  /* Philosophy */
+  .principles {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .principle p {
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  .principle strong {
+    font-weight: 600;
+  }
+
+  .attribution {
+    margin-top: 3rem;
+    font-size: 1.0625rem;
+    color: var(--secondary);
+    font-style: italic;
+    max-width: 58ch;
+  }
+
+  /* Modules */
+  .modules {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .module h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .module p {
+    margin: 0 0 0.5rem 0;
+    max-width: 62ch;
+  }
+
+  .module .compliance {
+    font-size: 0.875rem;
+    color: var(--secondary);
+    margin-top: 0.75rem;
+  }
+
+  .reassurance {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--secondary);
+    font-size: 0.9375rem;
+    max-width: 60ch;
+  }
+
+  /* Founder */
+  .founder p {
+    max-width: 64ch;
+    margin: 0 0 1rem 0;
+  }
+
+  .founder .signoff {
+    margin-top: 1.5rem;
+    font-weight: 500;
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+    color: var(--secondary);
+  }
+
+  /* Pilot */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    margin: 2rem 0 2.5rem 0;
+  }
+
+  .phase .label {
+    font-weight: 600;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .phase p { margin: 0; max-width: 60ch; }
+
+  .pilot .btn { margin-bottom: 1rem; }
+
+  .email-fallback {
+    font-size: 0.875rem;
+    color: var(--secondary);
+  }
+
+  .email-fallback button {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem max(1.5rem, env(safe-area-inset-left)) calc(3rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .legal {
+    font-size: 0.8125rem;
+    color: var(--secondary);
+    text-align: center;
+    max-width: 60ch;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    .facts { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <span class="wordmark serif">Charlie</span>
+  <a class="btn btn-topbar" href="#pilot">Request sandbox</a>
+</div>
+
+<main>
+
+  <section class="hero">
+    <h1 class="serif">The average wealth firm loses 30% of its mass affluent AUM during corrections — not to better products, but to panic.</h1>
+    <p class="sub">Charlie is enterprise software that makes the emotional math visible before your clients press sell.</p>
+    <a class="btn" id="hero-cta" href="#pilot">See the 14-day sandbox</a>
+  </section>
+
+  <hr class="rule">
+
+  <section class="philosophy">
+    <h2 class="heading serif">The philosophy behind the name</h2>
+    <div class="principles">
+      <div class="principle">
+        <p><strong>Inversion.</strong> To protect assets under management, Charlie starts with what destroys them. Most platforms optimize for returns. Charlie optimizes for the decision a client makes at the worst possible moment, and works backward from there.</p>
+      </div>
+      <div class="principle">
+        <p><strong>Avoiding stupidity over seeking brilliance.</strong> Charlie runs on deterministic math and historical precedent, not language-model speculation. The engine does not forecast markets. It shows clients what markets have actually done before, under comparable conditions.</p>
+      </div>
+      <div class="principle">
+        <p><strong>Uninterrupted compounding.</strong> Every unnecessary liquidation at a market bottom is a permanent tax on long-term return. Charlie's job is narrow: prevent the redemptions that don't need to happen.</p>
+      </div>
+    </div>
+    <p class="attribution">Named for Charlie Munger, who argued that long-term wealth accumulation is 10% intelligence and 90% temperament.</p>
+  </section>
+
+  <section class="modules-section">
+    <h2 class="heading serif">What Charlie does</h2>
+    <div class="modules">
+      <div class="module">
+        <h3>Advisor Co-Pilot</h3>
+        <p>Serving a $200K account takes your advisors the same three hours of reporting as a $5M account, which makes roughly 80% of your book unprofitable to service properly.</p>
+        <p>Charlie generates automated tax-drag audits and branded portfolio summaries in seconds, ready for an advisor's sign-off.</p>
+        <p class="compliance">Compliance stance: rule-based administrative software running on advisor-configured parameters.</p>
+      </div>
+      <div class="module">
+        <h3>Market Signal Tracker</h3>
+        <p>Insider filings are noisy. Routine stock grants and rebalancing trades bury the signal your analysts are actually looking for.</p>
+        <p>Charlie ingests and filters SEC Form 4, HKEX DI, and SGX disclosures to surface open-market C-suite purchases.</p>
+        <p class="compliance">Compliance stance: factual regulatory data aggregation. No price targets or recommendations generated.</p>
+      </div>
+      <div class="module">
+        <h3>Anti-Panic Visualizer</h3>
+        <p>When markets drop 10 to 20%, your clients don't need more news. They need to see what happens if they hold.</p>
+        <p>Charlie runs historical recovery matching and cost-of-panic calculations against the client's actual portfolio allocation, not a generic index.</p>
+        <p class="compliance">Compliance stance: non-advisory historical data visualization. No buy or sell recommendations generated.</p>
+      </div>
+    </div>
+    <p class="reassurance">All Charlie outputs are draft materials for licensed human advisors to review, adjust, and approve. Charlie holds zero advisory discretion.</p>
+  </section>
+
+  <hr class="rule">
+
+  <section class="founder">
+    <h2 class="heading serif">Built by a practitioner</h2>
+    <p>As VP of Digital SG at CIMB, Amber Liang led AI adoption for one of ASEAN's largest banking groups, after product leadership roles at Alibaba and Coupang across the same APAC markets this page is written for. She also founded Adaptive Intelligence, an AI product studio building agentic strategies for Fortune 500 companies and fintechs in the region — Charlie is an extension of that practice, purpose-built for wealth management.</p>
+    <p>She built Charlie's behavioral guardrail frameworks, including its gate-based decision system and anti-panic architecture, to manage her own portfolio first. That makes her the first user of the software, not just its founder, and it means she understands the regulatory line between software analytics and financial advice because she has operated on both sides of it.</p>
+    <p class="signoff">Amber Liang — Founder, Charlie Technologies.</p>
+    <div class="facts">
+      <span>Based in Singapore</span>
+      <span>Serves SG &amp; HK markets</span>
+      <span>Enterprise software license (SSIC 62011)</span>
+    </div>
+  </section>
+
+  <section class="pilot" id="pilot">
+    <h2 class="heading serif">14-Day Software Sandbox</h2>
+    <div class="phases">
+      <div class="phase">
+        <p class="label">Days 1–5</p>
+        <p>Upload anonymized portfolio data (CSV or JSON) into an isolated sandbox. Test report generation speed and drawdown analytics.</p>
+      </div>
+      <div class="phase">
+        <p class="label">Days 6–14</p>
+        <p>Give three to five internal advisors dashboard access. Measure time savings and collect feedback.</p>
+      </div>
+    </div>
+    <a class="btn" href="mailto:amber@adptv.xyz?subject=Charlie%20Sandbox%20Inquiry">Request sandbox access</a>
+    <p class="email-fallback">Or write directly to <span id="email-text">amber@adptv.xyz</span> — <button type="button" id="copy-email">copy address</button></p>
+  </section>
+
+</main>
+
+<footer>
+  <p class="legal">Charlie Technologies is a provider of financial technology and software analytics. Charlie does not offer investment advisory services, brokerage services, or asset management.</p>
+</footer>
+
+<script>
+  (function () {
+    var topbar = document.getElementById('topbar');
+    var heroCta = document.getElementById('hero-cta');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function onScroll() {
+      var heroHeight = document.querySelector('.hero').offsetHeight;
+      if (window.scrollY > heroHeight * 0.6) {
+        topbar.classList.add('scrolled');
+      } else {
+        topbar.classList.remove('scrolled');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    function smoothScrollTo(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    if (heroCta) {
+      heroCta.addEventListener('click', function (e) {
+        e.preventDefault();
+        smoothScrollTo('pilot');
+      });
+    }
+
+    var copyBtn = document.getElementById('copy-email');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var email = 'amber@adptv.xyz';
+        var done = function () {
+          copyBtn.textContent = 'copied';
+          setTimeout(function () { copyBtn.textContent = 'copy address'; }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(done).catch(function () {
+            var range = document.createRange();
+            range.selectNode(document.getElementById('email-text'));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+          });
+        }
+      });
+    }
+  })();
+</script>
+<!-- ARTIFACT-END -->
+</body>
+</html>
