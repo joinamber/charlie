@@ -239,10 +239,6 @@
     align-items: start;
   }
   .demo-copy > p { color: var(--muted); font-size: 1.0625rem; margin: 1.25rem 0 0; max-width: 32rem; }
-  .phases { list-style: none; padding: 0; margin: 2.25rem 0 0; border-top: 1px solid var(--line); }
-  .phases li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
-  .phases b { font-weight: 500; font-size: 0.9375rem; }
-  .phases span { color: var(--muted); font-size: 0.9375rem; }
   .direct { margin-top: 1.75rem; font-size: 0.875rem; color: var(--faint); }
   .direct a { color: var(--muted); }
   .direct a:hover { color: var(--text); }
@@ -298,7 +294,6 @@
     .stat, .stat + .stat { padding: 1.75rem 0; border-left: none; }
     .stat + .stat { border-top: 1px solid var(--line); }
     .form-grid { grid-template-columns: 1fr; }
-    .phases li { grid-template-columns: 1fr; gap: 0.2rem; }
     .form-foot .btn { width: 100%; }
   }
 </style>
@@ -357,7 +352,7 @@
       <article class="module">
         <span class="tag">Reporting</span>
         <h3>Advisor Co-Pilot</h3>
-        <p>Tax-drag audits and branded portfolio reviews drafted in seconds, ready for adviser sign-off.</p>
+        <p>Branded portfolio reviews drafted in seconds, ready for adviser sign-off.</p>
         <p class="stance">Rule-based administrative software on adviser-configured parameters.</p>
       </article>
       <article class="module">
@@ -381,7 +376,7 @@
     <ul class="facts">
       <li>Isolated sandbox per firm</li>
       <li>Anonymized CSV or JSON uploads</li>
-      <li>Enterprise software license (SSIC 62011)</li>
+      <li>AI risk management</li>
     </ul>
   </section>
 
@@ -405,15 +400,11 @@
       <span class="eyebrow">Pilot</span>
       <h2>Request a demo.</h2>
       <p>See Charlie on your own book. Pilots run as a 14-day software sandbox with no integration work up front.</p>
-      <ul class="phases">
-        <li><b>Days 1–5</b><span>Upload anonymized portfolio data into an isolated sandbox. Test report speed and drawdown analytics.</span></li>
-        <li><b>Days 6–14</b><span>Give three to five advisers dashboard access. Measure time saved and collect feedback.</span></li>
-      </ul>
       <p class="direct">Prefer email? <a href="mailto:amber@adptv.xyz?subject=Charlie%20demo%20request">amber@adptv.xyz</a></p>
     </div>
 
     <div class="form-card">
-      <form id="demo-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+      <form id="demo-form" action="https://formspree.io/f/mbglyvbn" method="POST" novalidate>
         <input type="hidden" name="_subject" value="Charlie demo request">
         <div class="hp" aria-hidden="true">
           <label for="f-gotcha">Leave this field empty</label>
@@ -514,11 +505,6 @@
       if (form.querySelector('[name="_gotcha"]').value) return;
 
       var endpoint = form.getAttribute('action');
-      if (endpoint.indexOf('YOUR_FORM_ID') !== -1) {
-        status.textContent = FALLBACK;
-        return;
-      }
-
       submit.disabled = true;
       submit.textContent = 'Sending…';
 
