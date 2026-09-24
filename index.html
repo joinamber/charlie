@@ -490,7 +490,13 @@
     var status = document.getElementById('form-status');
     var submit = document.getElementById('f-submit');
     var done = document.getElementById('form-done');
-    var FALLBACK = 'Your request could not be sent. Please email amber@adptv.xyz directly.';
+    var EMAIL_HINT = ' Please email amber@adptv.xyz directly.';
+
+    function fail(message) {
+      status.textContent = message + EMAIL_HINT;
+      submit.disabled = false;
+      submit.textContent = 'Request a demo';
+    }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -510,15 +516,19 @@
 
       fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
         .then(function (res) {
-          if (!res.ok) throw new Error('status ' + res.status);
-          document.getElementById('done-email').textContent = form.email.value;
-          form.hidden = true;
-          done.hidden = false;
+          if (res.ok) {
+            document.getElementById('done-email').textContent = form.email.value;
+            form.hidden = true;
+            done.hidden = false;
+            return;
+          }
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            var reasons = (data.errors || []).map(function (err) { return err.message; }).join(' ');
+            fail('The form service declined the request' + (reasons ? ': ' + reasons : ' (error ' + res.status + ').'));
+          });
         })
         .catch(function () {
-          status.textContent = FALLBACK;
-          submit.disabled = false;
-          submit.textContent = 'Request a demo';
+          fail('Your request could not reach the form service.');
         });
     });
   })();
