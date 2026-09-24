@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Charlie dashboard mockup</title>
+<!-- Source for assets/dashboard.webp. Fonts come from the @fontsource Geist, Geist Mono and
+     Newsreader npm packages, copied into ./fonts next to this file before rendering:
+     headless_shell --screenshot --window-size=1440,900 --force-device-scale-factor=2 dashboard-source.html
+     then resize to 2200px wide and save as WebP. -->
+
+<style>
+  @font-face { font-family: 'Geist'; src: url('fonts/geist-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'Geist Mono'; src: url('fonts/geist-mono-latin-400-normal.woff2') format('woff2'); font-weight: 400; }
+  @font-face { font-family: 'Newsreader'; src: url('fonts/newsreader-latin-opsz-normal.woff2') format('woff2'); font-weight: 200 800; }
+
+  :root {
+    --bg: #0E0E0D;
+    --side: #121211;
+    --panel: #171716;
+    --panel-2: #1C1C1A;
+    --line: rgba(255,255,255,0.07);
+    --line-2: rgba(255,255,255,0.11);
+    --text: #EDEBE6;
+    --muted: #97948C;
+    --faint: #62605A;
+    --held: #1F9E86;
+    --sold: #CC7A33;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1440px; height: 900px; background: var(--bg); color: var(--text); overflow: hidden; }
+  body { font-family: 'Geist', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; display: grid; grid-template-columns: 232px 1fr; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
+  .serif { font-family: 'Newsreader', serif; }
+
+  /* Sidebar */
+  aside { background: var(--side); border-right: 1px solid var(--line); padding: 22px 14px; display: flex; flex-direction: column; gap: 26px; }
+  .brand { font-family: 'Newsreader', serif; font-size: 22px; letter-spacing: -0.02em; padding: 0 10px; }
+  nav { display: flex; flex-direction: column; gap: 2px; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--muted); text-decoration: none; }
+  nav a.on { background: rgba(255,255,255,0.06); color: var(--text); }
+  nav svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+  .group-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--faint); padding: 0 10px 6px; }
+  .recent a { display: block; padding: 6px 10px; color: var(--muted); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent a.on { color: var(--text); }
+  .me { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px; border-top: 1px solid var(--line); }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; background: #2A2926; display: grid; place-items: center; font-size: 11px; color: var(--text); }
+  .me small { display: block; color: var(--faint); font-size: 11px; }
+
+  /* Main */
+  .main { display: grid; grid-template-rows: 52px 1fr; min-width: 0; }
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--line); }
+  .crumb { color: var(--muted); }
+  .crumb b { color: var(--text); font-weight: 500; }
+  .pills { display: flex; gap: 8px; }
+  .pill { font-size: 11.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-2); color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .pill i { width: 6px; height: 6px; border-radius: 50%; background: var(--held); display: inline-block; }
+
+  .content { display: grid; grid-template-columns: 1fr 420px; gap: 24px; padding: 26px 28px 24px; min-height: 0; }
+
+  /* Thread */
+  .thread { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .ask { align-self: flex-end; max-width: 78%; background: var(--panel-2); border: 1px solid var(--line); padding: 11px 15px; border-radius: 12px 12px 4px 12px; font-size: 13.5px; }
+  .answer { display: flex; flex-direction: column; gap: 12px; }
+  .who { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+  .who .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--text); color: var(--bg); display: grid; place-items: center; font-family: 'Newsreader', serif; font-size: 13px; }
+  .answer p { font-size: 14px; color: var(--text); max-width: 60ch; }
+  .answer p.lede { font-family: 'Newsreader', serif; font-size: 19px; line-height: 1.4; letter-spacing: -0.01em; }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+  .card-h { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 16px 10px; }
+  .card-h h4 { font-weight: 500; font-size: 13px; }
+  .card-h span { color: var(--faint); font-size: 11.5px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-weight: 400; color: var(--faint); font-size: 11.5px; padding: 6px 16px; border-top: 1px solid var(--line); }
+  td { padding: 9px 16px; border-top: 1px solid var(--line); }
+  td.num, th.num { text-align: right; }
+  tr.total td { color: var(--text); font-weight: 500; }
+  .card-f { padding: 10px 16px 12px; border-top: 1px solid var(--line); color: var(--faint); font-size: 11.5px; }
+
+  .checks { display: flex; flex-direction: column; gap: 7px; }
+  .check { display: flex; gap: 10px; align-items: flex-start; color: var(--muted); font-size: 13px; }
+  .check b { font-weight: 500; color: var(--text); }
+  .check .n { flex: none; width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--line-2); display: grid; place-items: center; font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+
+  .actions { display: flex; gap: 8px; }
+  .btn { font-size: 12.5px; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--line-2); color: var(--text); }
+  .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); font-weight: 500; }
+
+  .composer { margin-top: auto; border: 1px solid var(--line-2); background: var(--panel); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .composer .ph { color: var(--faint); font-size: 13.5px; }
+  .composer .row { display: flex; justify-content: space-between; align-items: center; }
+  .chips { display: flex; gap: 6px; }
+  .chip { font-size: 11.5px; color: var(--muted); padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.05); }
+  .send { width: 26px; height: 26px; border-radius: 7px; background: var(--text); display: grid; place-items: center; }
+  .send svg { width: 13px; height: 13px; stroke: var(--bg); stroke-width: 2; fill: none; }
+
+  /* Right rail */
+  .rail { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+  .big { padding: 0 16px 4px; }
+  .big .v { font-family: 'Newsreader', serif; font-size: 34px; letter-spacing: -0.02em; line-height: 1.1; }
+  .big .s { color: var(--muted); font-size: 12px; }
+  .legend { display: flex; gap: 14px; padding: 8px 16px 0; font-size: 11.5px; color: var(--muted); }
+  .legend i { display: inline-block; width: 12px; height: 2px; border-radius: 1px; vertical-align: middle; margin-right: 6px; }
+  svg.chart { display: block; margin: 4px 8px 0; }
+  .sig { display: grid; grid-template-columns: 62px 1fr auto; gap: 2px 10px; padding: 9px 16px; border-top: 1px solid var(--line); align-items: baseline; }
+  .sig .src { font-size: 10.5px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.04em; }
+  .sig .co { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sig .amt { text-align: right; }
+  .sig .meta { grid-column: 2 / 4; color: var(--faint); font-size: 11.5px; }
+</style>
+</head>
+<body>
+  <aside>
+    <div class="brand">Charlie</div>
+    <nav>
+      <a class="on"><svg viewBox="0 0 16 16"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z"/></svg>Assistant</a>
+      <a><svg viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5c.8-2.4 2.7-3.5 5-3.5s4.2 1.1 5 3.5"/></svg>Households</a>
+      <a><svg viewBox="0 0 16 16"><path d="M4 2.5h6l2.5 2.5v8.5h-8.5z"/><path d="M6 8h4.5M6 10.5h4.5"/></svg>Reports</a>
+      <a><svg viewBox="0 0 16 16"><path d="M2.5 12.5l3.5-4 3 2.5 4.5-6"/></svg>Market signals</a>
+      <a><svg viewBox="0 0 16 16"><path d="M2.5 4l3.5 5 3-2 4.5 5.5"/><path d="M2.5 13.5h11"/></svg>Drawdowns</a>
+    </nav>
+    <div class="recent">
+      <div class="group-label">Recent</div>
+      <a class="on">Lim household · Q3 review</a>
+      <a>Chen Family Trust · rebalance memo</a>
+      <a>Ong household · cost of panic</a>
+      <a>Weekly insider digest · SG/HK</a>
+      <a>Koh household · onboarding pack</a>
+    </div>
+    <div class="me">
+      <div class="avatar">RT</div>
+      <div>Rachel Tan<small>Relationship manager</small></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <div class="crumb">Assistant &nbsp;/&nbsp; <b>Lim household</b> &nbsp;·&nbsp; S$1.84M across 2 custodians</div>
+      <div class="pills">
+        <span class="pill">Sample data</span>
+        <span class="pill"><i></i>Draft mode · adviser sign-off required</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="thread">
+        <div class="ask">Prepare the Q3 review for the Lim household and run a tax-drag audit.</div>
+
+        <div class="answer">
+          <div class="who"><span class="dot">C</span>Charlie · drafted in 6.2s from 14 holdings</div>
+          <p class="lede">Q3 review drafted. Three items need your review before it goes to the client.</p>
+
+          <div class="card">
+            <div class="card-h"><h4>Tax-drag audit</h4><span>Dividend withholding, trailing 12 months</span></div>
+            <table>
+              <thead><tr><th>Holding</th><th>Domicile</th><th class="num">Withholding</th><th class="num">Est. annual drag</th></tr></thead>
+              <tbody>
+                <tr><td>US Total Market ETF</td><td class="mono">US</td><td class="num mono">30%</td><td class="num mono">S$3,910</td></tr>
+                <tr><td>US Dividend Growth ETF</td><td class="mono">US</td><td class="num mono">30%</td><td class="num mono">S$2,510</td></tr>
+                <tr><td>Global Equity UCITS ETF</td><td class="mono">IE</td><td class="num mono">15%</td><td class="num mono">S$1,180</td></tr>
+                <tr class="total"><td>Total</td><td></td><td></td><td class="num mono">S$7,600</td></tr>
+              </tbody>
+            </table>
+            <div class="card-f">Computed on adviser-configured parameters. No recommendation generated.</div>
+          </div>
+
+          <div class="checks">
+            <div class="check"><span class="n">1</span><span><b>Performance summary</b> · QTD −4.2% against a −5.1% blended benchmark</span></div>
+            <div class="check"><span class="n">2</span><span><b>Tax-drag section</b> · S$7,600 a year in withholding across 3 holdings</span></div>
+            <div class="check"><span class="n">3</span><span><b>Drawdown context</b> · cost-of-panic chart for the current allocation</span></div>
+          </div>
+
+          <div class="actions">
+            <span class="btn primary">Open draft report</span>
+            <span class="btn">Send to R. Tan for sign-off</span>
+          </div>
+        </div>
+
+        <div class="composer">
+          <div class="ph">Ask Charlie about a household, a filing, or a drawdown…</div>
+          <div class="row">
+            <div class="chips"><span class="chip">Q3 review</span><span class="chip">Tax-drag audit</span><span class="chip">Cost of panic</span><span class="chip">Insider digest</span></div>
+            <span class="send"><svg viewBox="0 0 16 16"><path d="M8 13V3M3.5 7.5L8 3l4.5 4.5"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail">
+        <div class="card">
+          <div class="card-h"><h4>Cost of panic</h4><span>Lim household · 60/40 allocation</span></div>
+          <div class="big"><div class="v mono" style="font-family:'Newsreader',serif">S$<span id="cop">0</span>K</div><div class="s">3 years after an 18% drawdown, held vs. sold at the trough</div></div>
+          <div class="legend"><span><i style="background:var(--held)"></i>Held</span><span><i style="background:var(--sold)"></i>Sold at trough, re-entered at month 11</span></div>
+          <svg class="chart" id="chart" width="402" height="190" viewBox="0 0 402 190"></svg>
+          <div class="card-f">Median path of historical 15–25% drawdowns applied to the current allocation. Historical data, not a forecast.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-h"><h4>Market signals</h4><span>Open-market C-suite buys · this week</span></div>
+          <div class="sig"><span class="src">SGX</span><span class="co">Straits Harbour Holdings</span><span class="amt mono">S$1.2M</span><span class="meta">CEO · open-market purchase · 19 Sep</span></div>
+          <div class="sig"><span class="src">HKEX DI</span><span class="co">Pearl Delta Logistics</span><span class="amt mono">HK$8.4M</span><span class="meta">Chair · open-market purchase · 18 Sep</span></div>
+          <div class="sig"><span class="src">Form 4</span><span class="co">Northwind Semiconductor</span><span class="amt mono">US$2.1M</span><span class="meta">CFO · open-market purchase · 17 Sep</span></div>
+          <div class="card-f">212 filings screened · routine grants and 10b5-1 sales excluded</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Index path: 100 → 82 at month 5 → 100 by month 16 → 118 at month 36.
+  const wig = m => Math.sin(m * 1.7) * 0.9 + Math.sin(m * 0.6) * 0.6;
+  function market(m) {
+    let v;
+    if (m <= 5) v = 100 - 18 * (m / 5);
+    else if (m <= 16) v = 82 + 18 * ((m - 5) / 11);
+    else v = 100 + 18 * ((m - 16) / 20);
+    return m === 0 || m === 5 || m === 36 ? v : v + wig(m);
+  }
+  const held = [], sold = [];
+  const reentry = 11, trough = 5;
+  for (let m = 0; m <= 36; m++) {
+    const h = market(m);
+    held.push(h);
+    if (m <= trough) sold.push(h);
+    else if (m <= reentry) sold.push(market(trough));
+    else sold.push(market(trough) * h / market(reentry));
+  }
+  const base = 1.84; // S$M
+  const heldEnd = base * held[36] / 100, soldEnd = base * sold[36] / 100;
+  document.getElementById('cop').textContent = Math.round((heldEnd - soldEnd) * 1000);
+
+  const W = 402, H = 190, L = 34, R = 104, T = 12, B = 24;
+  const x = m => L + (m / 36) * (W - L - R);
+  const y = v => T + (1 - (v - 75) / (125 - 75)) * (H - T - B);
+  const svg = document.getElementById('chart');
+  const ns = 'http://www.w3.org/2000/svg';
+  const el = (n, a, t) => { const e = document.createElementNS(ns, n); for (const k in a) e.setAttribute(k, a[k]); if (t !== undefined) e.textContent = t; svg.appendChild(e); return e; };
+
+  [80, 100, 120].forEach(v => {
+    el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 1 });
+    el('text', { x: L - 8, y: y(v) + 3.5, 'text-anchor': 'end', fill: '#62605A', 'font-size': 10, 'font-family': 'Geist Mono' }, v);
+  });
+  [0, 12, 24, 36].forEach(m => {
+    el('text', { x: x(m), y: H - 6, 'text-anchor': 'middle', fill: '#62605A', 'font-size': 10, 'font-family': 'Geist Mono' }, m === 36 ? '36 mo' : m);
+  });
+  const path = arr => arr.map((v, m) => (m ? 'L' : 'M') + x(m).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+  el('path', { d: path(sold), fill: 'none', stroke: '#CC7A33', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+  el('path', { d: path(held), fill: 'none', stroke: '#1F9E86', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+
+  el('circle', { cx: x(trough), cy: y(sold[trough]), r: 4, fill: '#CC7A33', stroke: '#171716', 'stroke-width': 2 });
+  el('text', { x: x(trough) + 8, y: y(sold[trough]) + 14, fill: '#97948C', 'font-size': 10.5, 'font-family': 'Geist' }, 'Sold −18%');
+
+  [[held, heldEnd, '#1F9E86', 'Held'], [sold, soldEnd, '#CC7A33', 'Sold']].forEach(([arr, end, c, label]) => {
+    el('circle', { cx: x(36), cy: y(arr[36]), r: 4, fill: c, stroke: '#171716', 'stroke-width': 2 });
+    el('text', { x: x(36) + 10, y: y(arr[36]) - 2, fill: '#EDEBE6', 'font-size': 11.5, 'font-family': 'Geist Mono' }, 'S$' + end.toFixed(2) + 'M');
+    el('text', { x: x(36) + 10, y: y(arr[36]) + 12, fill: '#97948C', 'font-size': 10.5, 'font-family': 'Geist' }, label);
+  });
+</script>
+</body>
+</html>
