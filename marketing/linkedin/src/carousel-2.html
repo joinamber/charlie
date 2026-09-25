@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carousel 2: The product</title>
+<link rel="stylesheet" href="carousel.css">
+</head>
+<body>
+
+<section class="page" id="p1">
+  <div class="top"><span class="brand">Adaptive Intelligence</span><span>1 / 3</span></div>
+  <div class="main">
+    <p class="eyebrow">The product · Part 2 of 3</p>
+    <h2>Meet Charlie, the AI copilot for boutique wealth firms.</h2>
+    <img class="shot" src="../../../assets/dashboard.webp" alt="Charlie drafting a Q3 client review, with a tax-drag audit, a cost-of-panic chart and a feed of insider purchases">
+    <p class="body">Built for EAMs and independent advisers. Your advisers ask, Charlie drafts, and your advisers approve.</p>
+  </div>
+  <div class="foot"><span>Illustrative interface with sample data</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<section class="page alt" id="p2">
+  <div class="top"><span class="brand">Adaptive Intelligence</span><span>2 / 3</span></div>
+  <div class="main">
+    <p class="eyebrow">How it works</p>
+    <h2>Three problems, three modules.</h2>
+    <div class="card">
+      <h3>Advisor Co-Pilot</h3>
+      <p class="problem">A $200K account takes the same three hours of reporting as a $5M one.</p>
+      <p class="answer">Charlie drafts branded portfolio reviews in seconds, ready for sign-off.</p>
+    </div>
+    <div class="card">
+      <h3>Market Signal Tracker</h3>
+      <p class="problem">Insider filings are noisy. Routine grants bury the real signal.</p>
+      <p class="answer">Charlie filters SEC, HKEX and SGX filings down to open-market C-suite buys.</p>
+    </div>
+    <div class="card">
+      <h3>Anti-Panic Visualizer</h3>
+      <p class="problem">In a drawdown, clients don't need more news. They need context.</p>
+      <p class="answer">Charlie matches historical recoveries to each client's real allocation.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Every output is a draft your advisers approve</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<section class="page" id="p3">
+  <div class="top"><span class="brand">Adaptive Intelligence</span><span>3 / 3</span></div>
+  <div class="main">
+    <p class="eyebrow">Compliance</p>
+    <h2>Your advisers stay in charge.</h2>
+    <p class="lead">Every output is a draft. <span class="muted">Your licensed advisers review, adjust and approve.</span> Charlie holds zero advisory discretion.</p>
+    <div class="rows">
+      <div class="row"><b>Deterministic</b><span>Rules and historical data, not model speculation. The same inputs give the same draft.</span></div>
+      <div class="row"><b>Isolated</b><span>A separate sandbox for each firm, with anonymized CSV or JSON uploads.</span></div>
+      <div class="row"><b>Governed</b><span>AI risk management built in, aimed at the governance bar MAS is setting.</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Follow Adaptive Intelligence for part 3</span><span>Charlie AI</span></div>
+</section>
+
+<script>
+  var id = location.hash.slice(1);
+  if (id) document.querySelectorAll('.page').forEach(function (p) { p.hidden = p.id !== id; });
+</script>
+</body>
+</html>

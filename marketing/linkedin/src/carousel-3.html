@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carousel 3: The founder</title>
+<link rel="stylesheet" href="carousel.css">
+</head>
+<body>
+
+<section class="page" id="p1">
+  <div class="top"><span class="brand">Adaptive Intelligence</span><span>1 / 3</span></div>
+  <div class="main">
+    <p class="eyebrow">The founder · Part 3 of 3</p>
+    <h2>Meet Amber Liang, the AI strategist behind Charlie.</h2>
+    <p class="quote">“I've seen what a bank-sized AI budget buys. I built Charlie so independent firms don't need one.”</p>
+    <div class="ticks rule">
+      <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Led AI adoption at one of ASEAN's largest banking groups</span></div>
+      <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Product leadership at Alibaba across APAC</span></div>
+      <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Founder of Adaptive Intelligence, building agentic AI strategies for Fortune 500 companies and fintechs in the region</span></div>
+      <div class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Built Charlie's guardrails on her own portfolio first</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Amber Liang · Founder, Adaptive Intelligence and Charlie AI</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<section class="page alt" id="p2">
+  <div class="top"><span class="brand">Adaptive Intelligence</span><span>2 / 3</span></div>
+  <div class="main">
+    <p class="eyebrow">AI strategy for wealth teams</p>
+    <h2>From zero AI experience to AI-native teams.</h2>
+    <p class="body">Adaptive Intelligence helps leadership teams at Fortune 500 companies and fintechs set AI strategy and put it into daily workflows. For wealth firms, that becomes a hands-on workshop for RMs.</p>
+    <div class="rows">
+      <div class="row"><b>1-day intensive</b><span>AI in wealth management with live tool demos, then practice on real client scenarios.</span></div>
+      <div class="row"><b>3-day immersive</b><span>The compliance line, a working AI-assisted routine, and a personal action plan for each RM.</span></div>
+    </div>
+    <div class="stats">
+      <div class="stack"><p class="big">3</p><p class="small">workshops hosted</p></div>
+      <div class="stack"><p class="big">125+</p><p class="small">attendees, including Day of AI Singapore with MIT RAISE and i2 Learning</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Track record: luma.com/user/adaptiveintel</span><span class="swipe">Swipe →</span></div>
+</section>
+
+<section class="page" id="p3">
+  <div class="top"><span class="brand">Adaptive Intelligence</span><span>3 / 3</span></div>
+  <div class="main">
+    <p class="eyebrow">Work with us</p>
+    <h2>Two ways to start.</h2>
+    <div class="rows">
+      <div class="row"><b>14-day sandbox</b><span>See Charlie on your own book, with anonymized data and no integration work up front.</span></div>
+      <div class="row"><b>RM workshop</b><span>Build your team's AI confidence first. No integration, no data sharing.</span></div>
+    </div>
+    <div class="contact">
+      <h3>Talk to Amber</h3>
+      <p class="email">amber@adptv.xyz</p>
+      <p>linkedin.com/in/amberliang</p>
+    </div>
+  </div>
+  <p class="legal">Charlie AI is an early-stage startup in financial technology and software analytics for wealth management. Charlie AI does not offer investment advisory, brokerage services, or asset management services.</p>
+</section>
+
+<script>
+  var id = location.hash.slice(1);
+  if (id) document.querySelectorAll('.page').forEach(function (p) { p.hidden = p.id !== id; });
+</script>
+</body>
+</html>
