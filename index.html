@@ -931,7 +931,9 @@
   function fail(why) {
     busy = false;
     say([why + ' Please email ' + EMAIL + ' directly.'], function () {
-      offer([{ label: 'Try again', primary: true, go: submit }, { label: 'Email Amber', href: 'mailto:' + EMAIL + '?subject=Charlie%20enquiry' }]);
+      var d = state.data;
+      var body = ['Enquiry: ' + INTENTS[state.intent], 'Name: ' + d.name, 'Email: ' + d.email, 'Firm: ' + d.firm, 'Role: ' + d.role, d.aum ? 'Assets under advice: ' + d.aum : '', d.markets ? 'Markets: ' + d.markets : ''].filter(Boolean).join('\n');
+      offer([{ label: 'Try again', primary: true, go: submit }, { label: 'Email Amber with my details', href: 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Charlie: ' + INTENTS[state.intent]) + '&body=' + encodeURIComponent(body) }]);
     });
   }
 
