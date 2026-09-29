@@ -639,7 +639,7 @@
 (function () {
   var ENDPOINT = 'https://formspree.io/f/mbglyvbn';
   var EMAIL = 'amber@adptv.xyz';
-  var BOOKING_URL = ''; // paste a Calendly/Cal.com link here; empty falls back to an email request
+  var BOOKING_URL = 'https://calendly.com/amberlg/20-min';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var launch = document.getElementById('cb-launch');
@@ -745,10 +745,10 @@
     log.textContent = '';
     say(["Hi, I'm Charlie's guide. I can answer quick questions or connect you with Amber, our founder.", 'Which best describes you?'], function () {
       offer([
-        { label: 'I lead a wealth firm', log: 'Segment: firm leader', go: function () { state.segment = 'leader'; leaderPath(); } },
-        { label: 'Boutique wealth manager', log: 'Segment: boutique', go: function () { state.segment = 'boutique'; boutiquePath(); } },
-        { label: 'Private bank', log: 'Segment: private bank', go: function () { state.segment = 'bank'; bankPath(); } },
-        { label: 'Independent adviser (IFA)', log: 'Segment: IFA', go: function () { state.segment = 'ifa'; ifaPath(); } },
+        { label: 'Firm leaders', log: 'Segment: firm leader', go: function () { state.segment = 'leader'; leaderPath(); } },
+        { label: 'Boutique managers', log: 'Segment: boutique', go: function () { state.segment = 'boutique'; boutiquePath(); } },
+        { label: 'Private banking', log: 'Segment: private bank', go: function () { state.segment = 'bank'; bankPath(); } },
+        { label: 'IFAs', log: 'Segment: IFA', go: function () { state.segment = 'ifa'; ifaPath(); } },
         { label: 'Just exploring', go: learn }
       ]);
     });
