@@ -301,6 +301,77 @@
     .form-grid { grid-template-columns: 1fr; }
     .form-foot .btn { width: 100%; }
   }
+
+  /* Chatbot */
+  .cb-launch {
+    position: fixed;
+    right: max(1.25rem, env(safe-area-inset-right, 0px));
+    bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font: 500 0.9375rem/1 var(--sans);
+    color: var(--ink); background: var(--cream);
+    border: 1px solid transparent; border-radius: 999px;
+    padding: 0.85rem 1.2rem; cursor: pointer;
+    transition: background-color 200ms ease;
+  }
+  .cb-launch:hover { background: var(--cream-hover); }
+  .cb-launch svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .cb-launch[hidden], .cb-panel[hidden] { display: none !important; }
+
+  .cb-panel {
+    position: fixed; z-index: 70;
+    right: max(1.25rem, env(safe-area-inset-right, 0px));
+    bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    width: 390px; height: min(640px, calc(100dvh - 2.5rem));
+    display: flex; flex-direction: column;
+    background: var(--bg-2); color: var(--text);
+    border: 1px solid var(--line-2); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+  .cb-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.9rem 1rem 0.9rem 1.15rem; border-bottom: 1px solid var(--line); }
+  .cb-title { display: flex; flex-direction: column; line-height: 1.25; }
+  .cb-title b { font-family: var(--serif); font-weight: 400; font-size: 1.25rem; letter-spacing: -0.01em; }
+  .cb-title span { font-size: 0.75rem; color: var(--faint); }
+  .cb-icon { width: 40px; height: 40px; display: grid; place-items: center; background: none; border: 1px solid transparent; border-radius: 10px; color: var(--muted); cursor: pointer; }
+  .cb-icon:hover { color: var(--text); border-color: var(--line-2); }
+  .cb-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .cb-head .acts { display: flex; gap: 0.25rem; }
+
+  .cb-log { flex: 1; overflow-y: auto; padding: 1rem 1.15rem; display: flex; flex-direction: column; gap: 0.6rem; overscroll-behavior: contain; }
+  .cb-msg { max-width: 86%; padding: 0.65rem 0.9rem; border-radius: 14px; font-size: 0.9375rem; line-height: 1.5; white-space: pre-line; overflow-wrap: anywhere; }
+  .cb-msg.bot { align-self: flex-start; background: var(--panel); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .cb-msg.me { align-self: flex-end; background: var(--cream); color: var(--ink); border-bottom-right-radius: 4px; }
+  .cb-msg a { color: var(--accent); }
+  .cb-typing { align-self: flex-start; color: var(--faint); font-size: 0.8125rem; padding: 0.2rem 0.4rem; }
+
+  .cb-opts { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0 1.15rem 0.75rem; max-height: 40%; overflow-y: auto; }
+  .cb-opts:empty { display: none; }
+  .cb-chip {
+    font: 500 0.875rem/1.25 var(--sans); color: var(--text); text-align: left;
+    background: transparent; border: 1px solid var(--line-2); border-radius: 999px;
+    padding: 0.6rem 0.95rem; cursor: pointer; text-decoration: none; display: inline-block;
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+  .cb-chip:hover { border-color: rgba(255, 255, 255, 0.35); }
+  .cb-chip.on { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+  .cb-chip.primary { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+  .cb-chip.primary:hover { background: var(--cream-hover); }
+
+  .cb-form { display: flex; gap: 0.5rem; padding: 0.75rem 1.15rem calc(0.9rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+  .cb-form input { flex: 1; min-width: 0; font: 400 1rem/1.3 var(--sans); color: var(--text); background: var(--bg); border: 1px solid var(--line-2); border-radius: 999px; padding: 0.7rem 1rem; }
+  .cb-form input::placeholder { color: var(--faint); }
+  .cb-form button { width: 44px; height: 44px; flex: none; border-radius: 50%; border: none; background: var(--cream); color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+  .cb-form button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .cb-form button:disabled { opacity: 0.5; cursor: default; }
+  .cb-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  @media (max-width: 640px) {
+    .cb-panel { inset: 0; width: 100%; height: 100dvh; border-radius: 0; border: none; box-shadow: none; }
+    .cb-head { padding-top: calc(0.9rem + env(safe-area-inset-top, 0px)); }
+    .cb-launch { padding: 0.95rem 1.1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cb-launch, .cb-chip { transition: none; } }
 </style>
 </head>
 <body>
@@ -540,6 +611,388 @@
         });
     });
   })();
+</script>
+
+<button class="cb-launch" id="cb-launch" type="button" aria-haspopup="dialog" aria-controls="cb-panel">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/></svg>
+  Ask Charlie
+</button>
+
+<section class="cb-panel" id="cb-panel" role="dialog" aria-modal="false" aria-labelledby="cb-title" hidden>
+  <div class="cb-head">
+    <div class="cb-title"><b id="cb-title">Ask Charlie</b><span>Guided help. Not investment advice.</span></div>
+    <div class="acts">
+      <button class="cb-icon" id="cb-restart" type="button" aria-label="Start over"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v4h4"/></svg></button>
+      <button class="cb-icon" id="cb-close" type="button" aria-label="Close chat"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+  <div class="cb-log" id="cb-log" role="log" aria-live="polite"></div>
+  <div class="cb-opts" id="cb-opts"></div>
+  <form class="cb-form" id="cb-form" autocomplete="off" novalidate>
+    <div class="cb-hp" aria-hidden="true"><label for="cb-gotcha">Leave empty</label><input type="text" id="cb-gotcha" tabindex="-1" autocomplete="off"></div>
+    <input type="text" id="cb-input" aria-label="Your message" placeholder="Type here, or pick an option above" enterkeyhint="send">
+    <button type="submit" id="cb-send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></button>
+  </form>
+</section>
+
+<script>
+(function () {
+  var ENDPOINT = 'https://formspree.io/f/mbglyvbn';
+  var EMAIL = 'amber@adptv.xyz';
+  var BOOKING_URL = ''; // paste a Calendly/Cal.com link here; empty falls back to an email request
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var launch = document.getElementById('cb-launch');
+  var panel = document.getElementById('cb-panel');
+  var log = document.getElementById('cb-log');
+  var opts = document.getElementById('cb-opts');
+  var form = document.getElementById('cb-form');
+  var input = document.getElementById('cb-input');
+  var send = document.getElementById('cb-send');
+
+  var SEGMENTS = {
+    leader:   { type: 'Firm leader' },
+    boutique: { type: 'Boutique wealth manager' },
+    bank:     { type: 'Private bank' },
+    ifa:      { type: 'Independent adviser (IFA)' }
+  };
+  var INTENTS = {
+    demo:     'Request a demo',
+    partner:  'Design partner application',
+    workshop: 'RM workshop',
+    call:     'Book a call',
+    question: 'General question'
+  };
+  var AUM = ['Under US$100M', 'US$100M – 500M', 'US$500M – 2B', 'Over US$2B', 'Prefer not to say'];
+  var MARKETS = ['Singapore', 'Hong Kong', 'Greater China', 'Southeast Asia', 'Other'];
+
+  var state;
+  var pending = null;   // { type:'text'|'single'|'multi', ... }
+  var busy = false;
+
+  function reset() {
+    state = { segment: null, intent: null, topic: '', data: {}, trail: [] };
+    pending = null;
+  }
+
+  /* ---------- rendering ---------- */
+  function scroll() { log.scrollTop = log.scrollHeight; }
+  function bubble(cls, text) {
+    var d = document.createElement('div');
+    d.className = 'cb-msg ' + cls;
+    d.textContent = text;
+    log.appendChild(d);
+    scroll();
+    return d;
+  }
+  function say(lines, done) {
+    var list = Array.isArray(lines) ? lines : [lines];
+    var i = 0;
+    busy = true;
+    setOptions([]);
+    (function next() {
+      if (i >= list.length) { busy = false; if (done) done(); return; }
+      var t = document.createElement('div');
+      t.className = 'cb-typing'; t.textContent = 'Charlie is typing…';
+      if (!reduce) { log.appendChild(t); scroll(); }
+      setTimeout(function () {
+        if (t.parentNode) t.parentNode.removeChild(t);
+        var m = list[i++];
+        var b = bubble('bot', typeof m === 'string' ? m : m.text);
+        if (typeof m !== 'string' && m.link) {
+          b.appendChild(document.createTextNode(' '));
+          var a = document.createElement('a');
+          a.href = m.link.href; a.textContent = m.link.label; a.target = '_blank'; a.rel = 'noopener noreferrer';
+          b.appendChild(a);
+        }
+        next();
+      }, reduce ? 0 : 450);
+    })();
+  }
+  function setOptions(list, multi) {
+    opts.textContent = '';
+    list.forEach(function (o) {
+      var el;
+      if (o.href) { el = document.createElement('a'); el.href = o.href; el.target = '_blank'; el.rel = 'noopener noreferrer'; }
+      else { el = document.createElement('button'); el.type = 'button'; }
+      el.className = 'cb-chip' + (o.primary ? ' primary' : '');
+      el.textContent = o.label;
+      if (!o.href) el.addEventListener('click', function () { o.onPick(el); });
+      opts.appendChild(el);
+    });
+  }
+  function offer(list) { setOptions(list.map(function (o) { return { label: o.label, primary: o.primary, href: o.href, onPick: function () { pick(o); } }; })); }
+  function pick(o) {
+    if (busy) return;
+    bubble('me', o.label);
+    if (o.log) state.trail.push(o.log);
+    o.go();
+  }
+
+  /* ---------- content ---------- */
+  var SITE = 'the site';
+  function optsCore(extra) {
+    var base = [
+      { label: 'Request a demo', primary: true, go: function () { startCapture('demo'); } },
+      { label: 'Book a call', go: bookCall },
+      { label: 'How does Charlie work?', go: learn }
+    ];
+    return (extra || []).concat(base);
+  }
+
+  function start() {
+    reset();
+    log.textContent = '';
+    say(["Hi, I'm Charlie's guide. I can answer quick questions or connect you with Amber, our founder.", 'Which best describes you?'], function () {
+      offer([
+        { label: 'I lead a wealth firm', log: 'Segment: firm leader', go: function () { state.segment = 'leader'; leaderPath(); } },
+        { label: 'Boutique wealth manager', log: 'Segment: boutique', go: function () { state.segment = 'boutique'; boutiquePath(); } },
+        { label: 'Private bank', log: 'Segment: private bank', go: function () { state.segment = 'bank'; bankPath(); } },
+        { label: 'Independent adviser (IFA)', log: 'Segment: IFA', go: function () { state.segment = 'ifa'; ifaPath(); } },
+        { label: 'Just exploring', go: learn }
+      ]);
+    });
+  }
+
+  function leaderPath() {
+    say('Firm leaders usually come to us with one of four pressures. Which is closest to yours?', function () {
+      var A = {
+        talent: ['Talent is scarce and everyone is chasing the same relationship managers.', 'Charlie takes reporting and research off advisers\' desks so their hours go to clients, and one adviser can cover far more households.'],
+        onboard: ['Charlie today focuses on client reviews, market signals and drawdown context, not onboarding workflows.', 'It is early-stage, so Amber would like to hear what you need. That is a good topic for a first call.'],
+        heirs: ['70% of heirs leave their parents\' wealth manager within a few years of inheriting.', 'Charlie helps advisers show each client what panic-selling would cost against their real allocation, and frees time for the relationship.'],
+        report: ['A $200K account takes the same three hours of reporting as a $5M one.', 'Charlie drafts branded client reviews in seconds, ready for your adviser to review and approve.']
+      };
+      function o(label, key) { return { label: label, log: 'Pain: ' + label, go: function () { state.topic = label; say(A[key], function () { offer(optsCore()); }); } }; }
+      offer([o('Talent shortage', 'talent'), o('Onboarding speed', 'onboard'), o('Heir retention', 'heirs'), o('Adviser reporting time', 'report')]);
+    });
+  }
+
+  function boutiquePath() {
+    say(['Boutique firms can\'t match a bank\'s AI budget, but they can match the experience. OCBC alone is spending S$1 billion a year on AI-native wealth tools.', 'Charlie gives you the same digital fluency so one adviser can serve 300+ mass affluent households instead of 80.'], function () {
+      offer(optsCore([{ label: 'RM workshop for my team', go: function () { startCapture('workshop'); } }]));
+    });
+  }
+
+  function bankPath() {
+    say(['Charlie is deterministic and auditable: rules and historical data, not model speculation. Every output is a draft for a licensed adviser, and Charlie holds zero advisory discretion.', 'Pilots run in an isolated sandbox with anonymized data. Charlie is early-stage, so treat this as an exploration with the founder.'], function () {
+      offer([
+        { label: 'Compliance and governance', go: compliance },
+        { label: 'Request a demo', primary: true, go: function () { startCapture('demo'); } },
+        { label: 'Book a call', go: bookCall },
+        { label: 'How does Charlie work?', go: learn }
+      ]);
+    });
+  }
+
+  function ifaPath() {
+    say(['Charlie is an AI copilot for independent advisers, and we are recruiting a few IFAs as design partners.', 'You get early access, a direct line to Amber, and a real say in what gets built. In return, we ask for honest feedback over a few short calls.'], function () {
+      offer([
+        { label: 'Apply as a design partner', primary: true, go: function () { startCapture('partner'); } },
+        { label: 'What would I get?', go: function () { say(['Early access to Charlie, a direct line to the founder, and influence over the roadmap.', 'We would ask for a few short feedback calls, and how you work today is the most useful input.'], function () { offer([{ label: 'Apply as a design partner', primary: true, go: function () { startCapture('partner'); } }, { label: 'How does Charlie work?', go: learn }]); }); } },
+        { label: 'How does Charlie work?', go: learn },
+        { label: 'Book a call', go: bookCall }
+      ]);
+    });
+  }
+
+  function compliance() {
+    say(['Every output is a draft. Your licensed advisers review, adjust and approve.', 'Advisor Co-Pilot is rule-based administrative software. Market Signal Tracker is factual filings aggregation with no price targets. Anti-Panic Visualizer is non-advisory historical visualization with no buy or sell signals.'], function () { offer(optsCore()); });
+  }
+
+  function learn() {
+    say('What would you like to know?', function () {
+      offer([
+        { label: 'The three modules', go: function () { say(['Advisor Co-Pilot: branded portfolio reviews drafted in seconds.', 'Market Signal Tracker: SEC, HKEX and SGX filings filtered to open-market C-suite purchases.', 'Anti-Panic Visualizer: historical recovery paths for each client\'s actual allocation.'], moreLearn); } },
+        { label: 'Compliance', go: compliance },
+        { label: 'The 14-day sandbox', go: function () { say('You upload anonymized portfolio data to an isolated sandbox and try Charlie with your advisers. There is no integration work up front.', moreLearn); } },
+        { label: 'RM workshop', go: function () { say('A 1-day or 3-day hands-on AI workshop for relationship managers, built on real client scenarios. No integration and no data sharing.', function () { offer([{ label: 'Ask about a workshop', primary: true, go: function () { startCapture('workshop'); } }, { label: 'Something else', go: learn }]); }); } },
+        { label: 'Who is behind it?', go: function () { say('Amber Liang led AI adoption at one of ASEAN\'s largest banking groups and founded Adaptive Intelligence, an AI product studio. She built Charlie\'s guardrails on her own portfolio first.', function () { offer([{ label: 'LinkedIn profile', href: 'https://www.linkedin.com/in/amberliang/' }, { label: 'Book a call', go: bookCall }, { label: 'Something else', go: learn }]); }); } },
+        { label: 'Pricing', go: function () { say('There is no public pricing yet. Pilots are custom, and Amber can talk through options on a call.', function () { offer([{ label: 'Book a call', primary: true, go: bookCall }, { label: 'Something else', go: learn }]); }); } }
+      ]);
+    });
+  }
+  function moreLearn() { offer(optsCore([{ label: 'Something else', go: learn }])); }
+
+  function bookCall() {
+    state.intent = 'call';
+    if (BOOKING_URL) {
+      say([{ text: 'You can pick a time that suits you here:', link: { href: BOOKING_URL, label: 'Book a 20-minute call' } }, 'Or leave your details and Amber will reach out.'], function () {
+        offer([{ label: 'Leave my details', go: function () { startCapture('call'); } }, { label: 'Back to menu', go: learn }]);
+      });
+    } else {
+      startCapture('call');
+    }
+  }
+
+  /* ---------- capture ---------- */
+  function steps(intent) {
+    var s = [
+      { key: 'name', ask: 'Great. What is your name?', ph: 'Full name', type: 'text' },
+      { key: 'email', ask: 'And your work email?', ph: 'name@firm.com', type: 'email' },
+      { key: 'firm', ask: 'Which firm are you with?', ph: 'Firm name', type: 'text' },
+      { key: 'role', ask: 'What is your role?', ph: 'e.g. Head of Digital', type: 'text' }
+    ];
+    if (intent === 'partner') {
+      s.push({ key: 'aum', ask: 'Roughly how much do you have under advice?', choices: AUM, type: 'single' });
+      s.push({ key: 'markets', ask: 'Which markets do you cover? Pick all that apply, then tap Done.', choices: MARKETS, type: 'multi' });
+    }
+    return s;
+  }
+
+  var queue = [];
+  function startCapture(intent) {
+    state.intent = intent;
+    if (!state.segment) state.segment = 'leader';
+    queue = steps(intent);
+    var intro = {
+      demo: 'Happy to arrange a demo. A few quick details and Amber will reply personally.',
+      partner: 'Wonderful. A few quick details for your design-partner application.',
+      workshop: 'Happy to talk about a workshop. A few quick details and Amber will reply with an agenda.',
+      call: 'Let us set up a call. A few quick details and Amber will suggest times.'
+    }[intent];
+    say(intro, nextStep);
+  }
+  function nextStep() {
+    if (!queue.length) return confirmStep();
+    var st = queue[0];
+    say(st.ask, function () {
+      pending = st;
+      setInputMode(st);
+      if (st.type === 'single') {
+        offer(st.choices.map(function (c) { return { label: c, go: function () { store(c); } }; }));
+      } else if (st.type === 'multi') {
+        var chosen = [];
+        setOptions(st.choices.map(function (c) { return { label: c, onPick: function (el) { var i = chosen.indexOf(c); if (i < 0) { chosen.push(c); el.classList.add('on'); } else { chosen.splice(i, 1); el.classList.remove('on'); } el.setAttribute('aria-pressed', String(i < 0)); } }; }).concat([{ label: 'Done', primary: true, onPick: function () { if (!chosen.length) { chosen.push('Not specified'); } bubble('me', chosen.join(', ')); store(chosen.join(', '), true); } }]));
+      } else if (input) { input.focus(); }
+    });
+  }
+  function setInputMode(st) {
+    input.type = st.type === 'email' ? 'email' : 'text';
+    input.inputMode = st.type === 'email' ? 'email' : 'text';
+    input.placeholder = st.ph || 'Type here, or pick an option above';
+  }
+  function store(val, silent) {
+    var st = queue.shift();
+    state.data[st.key] = val;
+    if (!silent && st.type !== 'text' && st.type !== 'email') { /* chip already echoed */ }
+    pending = null;
+    resetInput();
+    nextStep();
+  }
+  function resetInput() { input.type = 'text'; input.inputMode = 'text'; input.placeholder = 'Type here, or pick an option above'; input.value = ''; }
+
+  function confirmStep() {
+    var d = state.data;
+    var lines = ['Name: ' + d.name, 'Email: ' + d.email, 'Firm: ' + d.firm, 'Role: ' + d.role];
+    if (d.aum) lines.push('Assets under advice: ' + d.aum);
+    if (d.markets) lines.push('Markets: ' + d.markets);
+    say(['Here is what I will send to Amber (' + INTENTS[state.intent] + '):\n' + lines.join('\n'), 'By sending, you agree Amber may contact you about this request.'], function () {
+      offer([
+        { label: 'Send to Amber', primary: true, go: submit },
+        { label: 'Start over', go: start }
+      ]);
+    });
+  }
+
+  function submit() {
+    if (document.getElementById('cb-gotcha').value) return;
+    busy = true; setOptions([]);
+    var d = state.data;
+    var fd = new FormData();
+    fd.append('_subject', 'Charlie chatbot: ' + INTENTS[state.intent]);
+    fd.append('source', 'chatbot');
+    fd.append('intent', INTENTS[state.intent]);
+    fd.append('visitor_type', SEGMENTS[state.segment] ? SEGMENTS[state.segment].type : 'Unknown');
+    fd.append('name', d.name); fd.append('email', d.email); fd.append('firm', d.firm); fd.append('role', d.role);
+    if (d.aum) fd.append('aum', d.aum);
+    if (d.markets) fd.append('markets', d.markets);
+    fd.append('message', 'Sent via chatbot. Path: ' + (state.trail.join(' > ') || 'direct'));
+    fetch(ENDPOINT, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
+      .then(function (res) {
+        if (res.ok) return done();
+        return res.json().catch(function () { return {}; }).then(function (j) {
+          var why = (j.errors || []).map(function (e) { return e.message; }).join(' ');
+          fail('The form service declined the request' + (why ? ': ' + why : ' (error ' + res.status + ').'));
+        });
+      })
+      .catch(function () { fail('Your request could not reach the form service.'); });
+  }
+  function done() {
+    busy = false;
+    var msg = ['Thank you, ' + state.data.name.split(' ')[0] + '. Amber will reply to ' + state.data.email + ' personally.'];
+    say(msg, function () {
+      var o = [];
+      if (BOOKING_URL) o.push({ label: 'Book a call now', primary: true, href: BOOKING_URL });
+      o.push({ label: 'Ask something else', go: learn });
+      o.push({ label: 'Close', go: closePanel });
+      offer(o);
+    });
+  }
+  function fail(why) {
+    busy = false;
+    say([why + ' Please email ' + EMAIL + ' directly.'], function () {
+      offer([{ label: 'Try again', primary: true, go: submit }, { label: 'Email Amber', href: 'mailto:' + EMAIL + '?subject=Charlie%20enquiry' }]);
+    });
+  }
+
+  /* ---------- free text ---------- */
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function route(text) {
+    var t = text.toLowerCase();
+    if (/(demo|trial|pilot|sandbox)/.test(t)) return function () { startCapture('demo'); };
+    if (/(partner|early access)/.test(t)) return function () { state.segment = state.segment || 'ifa'; startCapture('partner'); };
+    if (/(workshop|training|upskill)/.test(t)) return function () { startCapture('workshop'); };
+    if (/(book|call|meeting|speak|talk)/.test(t)) return bookCall;
+    if (/(compliance|regulat|advice|advisory|mas|sfc|governance|risk)/.test(t)) return compliance;
+    if (/(price|pricing|cost|fee)/.test(t)) return function () { say('There is no public pricing yet. Pilots are custom, and Amber can talk through options on a call.', function () { offer(optsCore()); }); };
+    if (/(how|what|module|feature|work)/.test(t)) return learn;
+    return null;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var v = input.value.trim();
+    if (!v) return;
+    if (pending && (pending.type === 'text' || pending.type === 'email')) {
+      if (pending.type === 'email' && !EMAIL_RE.test(v)) { bubble('me', v); input.value = ''; say('That email does not look right. Could you check it and try again?', function () { setInputMode(pending); }); return; }
+      bubble('me', v);
+      store(v);
+      return;
+    }
+    if (pending && (pending.type === 'single' || pending.type === 'multi')) { bubble('me', v); input.value = ''; say('Please pick one of the options above.', function () { }); nextStepReoffer(); return; }
+    bubble('me', v);
+    input.value = '';
+    var r = route(v);
+    if (r) { r(); return; }
+    say(["I'm a guided assistant, so I may not have understood that. Here are the things I can help with:"], function () {
+      offer([
+        { label: 'How does Charlie work?', go: learn },
+        { label: 'Request a demo', primary: true, go: function () { startCapture('demo'); } },
+        { label: 'Book a call', go: bookCall },
+        { label: 'Email Amber', href: 'mailto:' + EMAIL + '?subject=Charlie%20enquiry' }
+      ]);
+    });
+  });
+  function nextStepReoffer() {
+    var st = pending; if (!st) return;
+    setTimeout(function () { if (st.type === 'single') offer(st.choices.map(function (c) { return { label: c, go: function () { store(c); } }; })); }, reduce ? 0 : 500);
+  }
+
+  /* ---------- open / close ---------- */
+  var started = false;
+  function openPanel() {
+    launch.hidden = true; panel.hidden = false;
+    if (!started) { started = true; start(); }
+    setTimeout(function () { if (window.innerWidth > 640) input.focus(); }, 50);
+  }
+  function closePanel() { panel.hidden = true; launch.hidden = false; launch.focus(); }
+  launch.addEventListener('click', openPanel);
+  document.getElementById('cb-close').addEventListener('click', closePanel);
+  document.getElementById('cb-restart').addEventListener('click', function () { resetInput(); start(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) closePanel(); });
+  reset();
+})();
 </script>
 <!-- ARTIFACT-END -->
 </body>
